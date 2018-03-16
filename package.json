@@ -1,7 +1,7 @@
 {
   "name": "nuxt-muse-ui",
   "version": "1.0.0",
-  "description": "Nuxt.js + Vuetify.js + Muse-ui",
+  "description": "Nuxt.js + Muse-ui",
   "author": "Renato Rodrigues <ren.gsg@gmail.com>",
   "private": true,
   "scripts": {
@@ -13,7 +13,7 @@
   "dependencies": {
     "muse-ui": "^2.1.0",
     "nuxt": "^1.0.0",
-    "vuetify": "^1.0.0"
+    "vue-media": "^1.1.1"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
@@ -26,8 +26,7 @@
     "eslint-plugin-node": "^5.1.1",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
-    "sass": "^1.0.0-beta.5.3",
-    "stylus": "^0.54.5",
-    "stylus-loader": "^3.0.1"
+    "node-sass": "^4.7.2",
+    "sass-loader": "^6.0.7"
   }
 }

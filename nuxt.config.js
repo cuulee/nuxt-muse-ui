@@ -10,16 +10,17 @@ module.exports = {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'Nuxt.js + Vuetify.js + Muse-ui' }
+      { hid: 'description', name: 'description', content: 'Nuxt.js + Muse-ui' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' }
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic' },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Material+Icons' }
     ]
   },
-  plugins: ['~/plugins/vuetify.js'],
+  plugins: ['~/plugins/plugin-ui.js'],
   css: [
-    '~/assets/style/app.styl'
+    '~/assets/style/app.sass'
   ],
   /*
   ** Customize the progress bar color
@@ -29,24 +30,14 @@ module.exports = {
   ** Build configuration
   */
   build: {
-    babel: {
-      plugins: [
-        ["transform-imports", {
-          "vuetify": {
-            "transform": "vuetify/es5/components/${member}",
-            "preventFullImport": true
-          }
-        }]
-      ]
-    },
     vendor: [
-      '~/plugins/vuetify.js'
+      '~/plugins/plugin-ui.js'
     ],
     extractCSS: true,
     /*
     ** Run ESLint on save
     */
-    extend (config, ctx) {
+    extend(config, ctx) {
       if (ctx.isDev && ctx.isClient) {
         config.module.rules.push({
           enforce: 'pre',
@@ -58,7 +49,7 @@ module.exports = {
       if (ctx.isServer) {
         config.externals = [
           nodeExternals({
-            whitelist: [/^vuetify/]
+            whitelist: [/^muse-ui/]
           })
         ]
       }
