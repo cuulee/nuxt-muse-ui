@@ -1,22 +1,5 @@
 <template>
   <div>
-    <h1>Page Index Start</h1>
-    <h1>Page Index</h1>
-    <h1>Page Index</h1>
-    <h1>Page Index</h1>
-    <h1>Page Index</h1>
-    <h1>Page Index</h1>
-    <h1>Page Index</h1>
-    <h1>Page Index</h1>
-    <h1>Page Index</h1>
-    <h1>Page Index</h1>
-    <h1>Page Index</h1>
-    <h1>Page Index</h1>
-    <h1>Page Index</h1>
-    <h1>Page Index</h1>
-    <h1>Page Index</h1>
-    <h1>Page Index</h1>
-    <h1>Page Index</h1>
     <h1>Page Index</h1>
   </div>
 </template>
@@ -29,8 +12,9 @@
       }
     },
     mounted () {
-      this.$store.state.titleEditable = false
-      this.$store.state.title = this.title
+      this.$store.commit('startTitle', {
+        title: this.title
+      })
     }
   }
 </script>

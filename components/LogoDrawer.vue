@@ -1,0 +1,47 @@
+<style lang="sass" scoped>
+.root
+  display: flex
+  justify-content: center
+  align-items: stretch
+  text-align: center
+  > *
+    width: calc(100% - 16px)
+    transition: height .2s ease-in-out
+    position: relative
+  div > div
+    position: absolute
+    top: 0
+    right: 0
+    bottom: 0
+    left: 0
+    background-repeat: no-repeat
+    background-position: center
+    background-size: contain
+
+.hidable
+  transition: visibility .2s ease-in-out, opacity .2s ease-in-out
+  opacity: .99
+
+.hidden
+  visibility: hidden
+  opacity: .01
+
+</style>
+
+<template>
+  <div class="root">
+    <h1 v-if="$store.state.logo.type === 'text'" :style="{'height': mini ? '72px' : '104px'}">{{mini ? $store.state.logo.miniContent : $store.state.logo.content}}</h1>
+    <div v-if="$store.state.logo.type === 'image'" :style="{'height': mini ? '72px' : '104px'}">
+      <div class="hidable" :class="{hidden: !mini}" :style="{'background-image': 'url('+$store.state.logo.miniContent+')'}"></div>
+      <div class="hidable" :class="{hidden: mini}" :style="{'background-image': 'url('+$store.state.logo.content+')'}"></div>
+    </div>
+  </div>
+</template>
+
+<script>
+  export default {
+    props: {
+      mini: true
+    }
+  }
+</script>

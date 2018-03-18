@@ -2,10 +2,13 @@
 .mu-appbar
   position: fixed
   top: 0
-  transition: transform .2s ease-in-out
+  transition: transform .2s ease-in-out, left .2s ease-in-out
 
 .mu-appbar.hide
   transform: Translate3D(0, -100%, 0)
+
+.mu-drawer
+  transition: width .2s ease-in-out, transform .45s ease-in-out, visibility .45s ease-in-out
 
 .mu-content-block
   position: fixed
@@ -14,7 +17,7 @@
   overflow-x: auto
   width: auto
   height: auto
-  transition: top .2s ease-in-out
+  transition: top .2s ease-in-out, left .2s ease-in-out
 
 .title-editable
   padding-top: 16px
@@ -29,57 +32,94 @@
   background-color: #FFF
   border-color: #FFF
 
-[disable]
-  disable
+.color-active
+  color: blue
 </style>
 
 <template>
   <div>
-    <media :query="{ maxWidth: 479 }" @media-enter="screenPhone = true" @media-leave="screenPhone = false" />
-    <media :query="{ minWidth: 480, maxWidth: 799 }" @media-enter="screenTablet = true" @media-leave="screenTablet = false" />
-    <media :query="{ minWidth: 800, maxWidth: 1023 }" @media-enter="screenLaptop = true" @media-leave="screenLaptop = false" />
-    <media :query="{ minWidth: 1024 }" @media-enter="screenDesktop = true" @media-leave="screenDesktop = false" />
+    <media :query="{ maxWidth: 479 }" @media-enter="$store.state.screen.phone = true" @media-leave="$store.state.screen.phone = false" />
+    <media :query="{ minWidth: 480, maxWidth: 799 }" @media-enter="$store.state.screen.tablet = true" @media-leave="$store.state.screen.tablet = false" />
+    <media :query="{ minWidth: 800, maxWidth: 1023 }" @media-enter="$store.state.screen.laptop = true" @media-leave="$store.state.screen.laptop = false" />
+    <media :query="{ minWidth: 1024 }" @media-enter="$store.state.screen.desktop = true" @media-leave="$store.state.screen.desktop = false" />
     <mu-appbar
-      :title="$store.state.titleEditable? '' : $store.state.title"
+      :title="$store.state.titleData.editable? '' : $store.state.titleData.title"
       :class="{ hide: scrollDown }"
       :zDepth="scrollDown ? 0 : 1"
-      :style="{left: computeDrawerWidth}">
+      :style="{ left: computeDrawerWidthSpace }">
       <mu-icon-button
-        v-if="!screenDesktop"
+        v-if="!$store.state.screen.desktop && $store.state.drawer.exists"
         icon="menu"
         slot="left"
-        @click="drawerOpen = !drawerOpen"/>
-      <template v-if="$store.state.titleEditable">
-        <div slot="left" class="title-editable" @keypress.enter="titleEdit">
+        @click="$store.state.drawer.open = !$store.state.drawer.open"/>
+      <template v-if="$store.state.titleData.editable">
+        <div
+          slot="left"
+          class="title-editable"
+          @keypress.enter="$store.commit('toogleEdit')">
           <mu-text-field
-            v-if="$store.state.titleEditable"
-            :disabled="!$store.state.titleEdit"
+            v-if="$store.state.titleData.editable"
+            :disabled="!$store.state.titleData.edit"
             hintTextClass="title-color"
             inputClass="title-color"
             underlineClass="title-line-color"
             underlineFocusClass="title-line-color"
-            v-model="$store.state.titleText"
-            :focus="$store.state.titleEdit"
-            :hintText="$store.state.titleLabel"/>
+            v-model="$store.state.titleData.text"
+            :focus="$store.state.titleData.edit"
+            :hintText="$store.state.titleData.label"/>
         </div>
+        <div
+          style="position: relative"
+          slot="left"
+          ref="titleButton"
+          @mouseenter="triggerTitleTooltip(true)"
+          @mouseleave="triggerTitleTooltip(false)">
           <mu-icon-button
-            slot="left"
-            @click="titleEdit"
-            :icon="$store.state.titleEdit ? 'check' : 'edit'"/>
+            @click="$store.commit('toogleEdit')"
+            :icon="$store.state.titleData.edit ? 'check' : 'edit'"/>
+          <mu-tooltip
+            :label="computeTooltip"
+            :trigger="$refs.titleButton"
+            :show="hoverTitleEdit"
+            verticalPosition="bottom"
+            horizontalPosition="center"/>
+        </div>
       </template>
     </mu-appbar>
-    <mu-drawer :open="(drawerOpen || screenDesktop) && $store.state.drawerExist" :docked="screenDesktop" @close="drawerOpen = false" :zDepth="0" :width="drawerWidth">
-      <mu-list>
-        <h1>MARCA</h1>
-        <template v-for="(item, index) in routes">
-          <mu-list-item :title="item.label" :to="item.path" @click="drawerOpen = false">
-            <mu-icon slot="left" :value="item.icon"/>
-          </mu-list-item>
-          <mu-divider v-if="item.divider"/>
-        </template>
-      </mu-list>
+    <mu-drawer
+      :open="($store.state.drawer.open || $store.state.screen.desktop) && $store.state.drawer.exists"
+      :docked="$store.state.screen.desktop" @close="$store.state.drawer.open = false"
+      :zDepth="0"
+      :width="computeDrawerWidth">
+      <div
+        @mouseenter="triggerOpenMini()"
+        @mouseleave="triggerCloseMini()">
+        <mu-list :value="$route.path">
+          <logo-drawer :mini="computeMiniDrawer"/>
+          <template v-for="(item, index) in routes">
+            <mu-divider v-if="item.divider"/>
+            <mu-list-item
+              :style="{color: 'red'}"
+              :title="item.label"
+              :value="item.path"
+              :to="item.path" @click="$store.state.drawer.open = false">
+              <mu-icon
+                slot="left"
+                :value="item.icon"
+                :style="{ 'margin-left': computeMiniDrawer ? '8px' : '0', transition: 'margin-left .2s ease-in-out' }"/>
+              <mu-tooltip
+                slot="right"
+                :label="item.label"
+                :trigger="$refs.titleButton"
+                :show="false"
+                verticalPosition="bottom"
+                horizontalPosition="right"/>
+            </mu-list-item>
+          </template>
+        </mu-list>
+      </div>
     </mu-drawer>
-    <mu-content-block @scroll="eventScroll" :style="{left: computeDrawerWidth, top: computeHideAppbar}">
+    <mu-content-block @scroll="eventScroll" :style="{left: computeDrawerWidthSpace, top: computeHideAppbar}">
       <nuxt/>
     </mu-content-block>
   </div>
@@ -87,68 +127,70 @@
 
 <script>
   import Media from 'vue-media'
+  import LogoDrawer from '~/components/LogoDrawer'
 
   export default {
     components: {
-      media: Media
+      media: Media,
+      'logo-drawer': LogoDrawer
     },
     data () {
       return {
-        screenPhone: false,
-        screenTablet: false,
-        screenLaptop: false,
-        screenDesktop: false,
-        drawerOpen: false,
-        drawerWidth: '280px',
-        appbarHeight: '64px',
-        scrollDown: false,
+        scrollDown: true,
+        hoverTitleEdit: false,
         lastScrollTop: 0,
-        title: '',
+        drawerMini: true,
         routes: [
-          {icon: 'inbox', path: '/', label: 'Home', divider: false},
-          {icon: 'inbox', path: '/page', label: 'Page', divider: true},
-          {icon: 'inbox', path: '/page1', label: 'Page1', divider: false},
-          {icon: 'inbox', path: '/page2', label: 'Page2', divider: false}
+          {icon: 'home', path: '/', label: 'Home'},
+          {icon: 'assessment', path: '/page', label: 'Control'},
+          {icon: 'assignment', path: '/page1', label: 'Action'},
+          {icon: 'person', path: '/page2', label: 'Profile'},
+          {icon: '', path: '/acc/page', label: 'Logout', divider: true}
         ]
       }
     },
     computed: {
       computeDrawerWidth () {
-        return this.screenDesktop ? this.drawerWidth : 0
+        let width = this.computeMiniDrawer ? '72px' : '280px'
+        return this.$store.state.drawer.exists ? width : 0
+      },
+      computeDrawerWidthSpace () {
+        return this.$store.state.screen.desktop ? this.computeDrawerWidth : 0
       },
       computeHideAppbar () {
         return this.scrollDown ? 0 : this.appbarHeight
-      }
-    },
-    watch: {
-      screenPhone (val) {
-        this.appbarHeight = val ? '56px' : '64px'
       },
-      screenDesktop (val) {
-        this.$el.style.setProperty('--drawer-width', !val ? 0 : this.drawerWidth)
+      computeTooltip () {
+        return this.$store.state.titleData.edit ? this.$store.state.titleData.checkTooltip : this.$store.state.titleData.editTooltip
       },
-      scrollDown (val) {
-        this.$el.style.setProperty('--app-bar-height', val ? 0 : this.appbarHeight)
+      computeMiniDrawer () {
+        return this.$store.state.drawer.mini && this.drawerMini && this.$store.state.screen.desktop
+      },
+      appbarHeight () {
+        return this.$store.state.screen.phone ? '56px' : '64px'
       }
     },
     methods: {
       eventScroll (e) {
         let top = this.$el.querySelector('.mu-content-block').scrollTop
-        this.scrollDown = top > this.lastScrollTop
+        this.scrollDown = top + 50 > this.lastScrollTop
         this.lastScrollTop = top
       },
-      titleEdit (e) {
-        this.$store.commit('toogleEdit')
-      }
-    },
-    created () {
-      if (process.browser) {
-        this.lastScrollTop = window.pageYOffset || document.documentElement.scrollTop
+      triggerTitleTooltip (val) {
+        this.hoverTitleEdit = val
+      },
+      triggerOpenMini () {
+        this.drawerMini = false
+      },
+      triggerCloseMini () {
+        this.drawerMini = true
       }
     },
     mounted () {
+      this.scrollDown = false
       if (process.browser) {
         let element = this.$el.querySelector('.mu-content-block')
+        this.lastScrollTop = element.scrollTop
         if (element) element.addEventListener('scroll', this.eventScroll)
       }
     },

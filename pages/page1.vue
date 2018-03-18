@@ -19,14 +19,13 @@
       }
     },
     mounted () {
-      this.$store.state.titleEditable = true
-      this.$store.state.titleText = 'Other'
-      this.$store.state.titleLabel = 'Your Name'
-      this.$store.state.titleCB.push(this.commitTitle)
+      this.$store.commit('startTitle', {
+        text: this.title
+      })
+      this.$store.commit('addTitleListener', this.commitTitle)
     },
     destroyed () {
-      let index = this.$store.state.titleCB.indexOf(this.commitTitle)
-      this.$store.state.titleCB.splice(index, 1)
+      this.$store.commit('removeTitleListener', this.commitTitle)
     }
   }
 </script>
