@@ -11,6 +11,7 @@
   transition: width .2s ease-in-out, transform .45s ease-in-out, visibility .45s ease-in-out
 
 .mu-content-block
+  display: flex
   position: fixed
   right: 0
   bottom: 0
@@ -94,7 +95,7 @@
       <div
         @mouseenter="triggerOpenMini()"
         @mouseleave="triggerCloseMini()">
-        <mu-list :value="$route.path">
+        <mu-list :value="extractLinkValue($route.path)">
           <logo-drawer :mini="computeMiniDrawer"/>
           <template v-for="(item, index) in routes">
             <mu-divider v-if="item.divider"/>
@@ -120,7 +121,7 @@
       </div>
     </mu-drawer>
     <mu-content-block @scroll="eventScroll" :style="{left: computeDrawerWidthSpace, top: computeHideAppbar}">
-      <nuxt/>
+      <nuxt v-show="!waitLoad"/>
     </mu-content-block>
   </div>
 </template>
@@ -128,7 +129,7 @@
 <script>
   import Media from 'vue-media'
   import LogoDrawer from '~/components/LogoDrawer'
-
+  //<mu-circular-progress v-show="waitLoad" :size="104" :strokeWidth="6"/>
   export default {
     components: {
       media: Media,
@@ -140,6 +141,8 @@
         hoverTitleEdit: false,
         lastScrollTop: 0,
         drawerMini: true,
+        waitLoad: true,
+        waitSize: 104,
         routes: [
           {icon: 'home', path: '/', label: 'Home'},
           {icon: 'assessment', path: '/page', label: 'Control'},
@@ -173,7 +176,7 @@
     methods: {
       eventScroll (e) {
         let top = this.$el.querySelector('.mu-content-block').scrollTop
-        this.scrollDown = top + 50 > this.lastScrollTop
+        this.scrollDown = top > this.lastScrollTop
         this.lastScrollTop = top
       },
       triggerTitleTooltip (val) {
@@ -184,10 +187,18 @@
       },
       triggerCloseMini () {
         this.drawerMini = true
+      },
+      extractLinkValue (link) {
+        if (link.length > 1 && link.slice(-1) === '/') {
+          return link.slice(0, -1)
+        } else {
+          return link
+        }
       }
     },
     mounted () {
       this.scrollDown = false
+      this.waitLoad = false
       if (process.browser) {
         let element = this.$el.querySelector('.mu-content-block')
         this.lastScrollTop = element.scrollTop
