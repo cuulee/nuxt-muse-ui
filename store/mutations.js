@@ -16,6 +16,7 @@ export default {
     state.titleData.editable = !data.title
 
     state.drawer.exists = !data.hideDrawer
+    state.drawer.mini = !!data.miniDrawer
   },
   addTitleListener (state, data) {
     state.titleData.callback.push(data)

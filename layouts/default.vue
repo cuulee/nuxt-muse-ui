@@ -120,8 +120,15 @@
         </mu-list>
       </div>
     </mu-drawer>
-    <mu-content-block @scroll="eventScroll" :style="{left: computeDrawerWidthSpace, top: computeHideAppbar}">
+    <mu-content-block
+      @scroll="eventScroll"
+      :style="{left: computeDrawerWidthSpace, top: computeHideAppbar}">
       <nuxt v-show="!waitLoad"/>
+      <mu-circular-progress
+        v-if="waitLoad"
+        :size="104"
+        :strokeWidth="6"
+        style="position: absolute; top:50%; left: 50%; transform: translate3D(-50%, -50%, 0)"/>
     </mu-content-block>
   </div>
 </template>
@@ -129,7 +136,7 @@
 <script>
   import Media from 'vue-media'
   import LogoDrawer from '~/components/LogoDrawer'
-  //<mu-circular-progress v-show="waitLoad" :size="104" :strokeWidth="6"/>
+  // <mu-circular-progress v-show="waitLoad" :size="104" :strokeWidth="6"/>
   export default {
     components: {
       media: Media,
@@ -145,10 +152,10 @@
         waitSize: 104,
         routes: [
           {icon: 'home', path: '/', label: 'Home'},
-          {icon: 'assessment', path: '/page', label: 'Control'},
-          {icon: 'assignment', path: '/page1', label: 'Action'},
-          {icon: 'person', path: '/page2', label: 'Profile'},
-          {icon: '', path: '/acc/page', label: 'Logout', divider: true}
+          {icon: 'assessment', path: '/no-menu', label: 'No Menu'},
+          {icon: 'assignment', path: '/mini-menu', label: 'Mini Menu'},
+          {icon: 'person', path: '/scroll', label: 'Scroll'},
+          {icon: '', path: '/acc/page', label: 'MultiPath', divider: true}
         ]
       }
     },

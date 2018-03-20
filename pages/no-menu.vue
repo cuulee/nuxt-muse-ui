@@ -1,8 +1,6 @@
 <template>
   <div>
-    <h1>Page Start</h1>
-    <h1>Page Start</h1>
-    <h1>Page Start</h1>
+    <h1 @click="$route.path = '/'">Go Home</h1>
   </div>
 </template>
 
@@ -10,20 +8,23 @@
   export default {
     data () {
       return {
-        title: 'Page Awe'
+        title: 'No Menu'
       }
     },
     methods: {
       commitTitle (e) {
-        console.log(e, '000')
+        console.log(e)
+        alert(e)
       }
     },
     mounted () {
+      console.log(this.$router)
       this.$store.commit('startTitle', {
         text: '',
         label: 'LABEL',
         editTooltip: 'edit',
-        checkTooltip: 'check'
+        checkTooltip: 'check',
+        hideDrawer: true
       })
       this.$store.commit('addTitleListener', this.commitTitle)
     },

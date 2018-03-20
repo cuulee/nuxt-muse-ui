@@ -16,7 +16,7 @@ const state = {
     desktop: false
   },
   drawer: {
-    exists: false,
+    exists: true,
     open: false,
     mini: false
   },

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Page Index</h1>
+    <h1>Test Nuxt</h1>
   </div>
 </template>
 
@@ -8,7 +8,7 @@
   export default {
     data () {
       return {
-        title: 'Page 01'
+        title: 'Home'
       }
     },
     mounted () {
