@@ -36,19 +36,10 @@
         title: 'Page 02'
       }
     },
-    methods: {
-      commitTitle (e) {
-        console.log(e, '002')
-      }
-    },
     mounted () {
       this.$store.commit('startTitle', {
-        text: this.title
+        title: this.title
       })
-      this.$store.commit('addTitleListener', this.commitTitle)
-    },
-    destroyed () {
-      this.$store.commit('removeTitleListener', this.commitTitle)
     }
   }
 </script>

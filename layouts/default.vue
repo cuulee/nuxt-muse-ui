@@ -35,6 +35,9 @@
 
 .color-active
   color: blue
+
+.mu-item, .mu-list-item
+  height: 48px
 </style>
 
 <template>
@@ -100,7 +103,6 @@
           <template v-for="(item, index) in routes">
             <mu-divider v-if="item.divider"/>
             <mu-list-item
-              :style="{color: 'red'}"
               :title="item.label"
               :value="item.path"
               :to="item.path" @click="$store.state.drawer.open = false">
@@ -123,7 +125,7 @@
     <mu-content-block
       @scroll="eventScroll"
       :style="{left: computeDrawerWidthSpace, top: computeHideAppbar}">
-      <nuxt v-show="!waitLoad"/>
+      <div v-show="!waitLoad"><nuxt/></div>
       <mu-circular-progress
         v-if="waitLoad"
         :size="104"
@@ -155,7 +157,7 @@
           {icon: 'assessment', path: '/no-menu', label: 'No Menu'},
           {icon: 'assignment', path: '/mini-menu', label: 'Mini Menu'},
           {icon: 'person', path: '/scroll', label: 'Scroll'},
-          {icon: '', path: '/acc/page', label: 'MultiPath', divider: true}
+          {icon: '', path: '/page', label: 'MultiPath', divider: true}
         ]
       }
     },
@@ -196,8 +198,10 @@
         this.drawerMini = true
       },
       extractLinkValue (link) {
-        if (link.length > 1 && link.slice(-1) === '/') {
-          return link.slice(0, -1)
+        if (link.length > 1) {
+          let index = link.indexOf('/', 1)
+          let r = index >= 0 ? link.slice(0, index) : link
+          return r
         } else {
           return link
         }

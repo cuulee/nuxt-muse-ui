@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 @click="$route.path = '/'">Go Home</h1>
+    <h1><nuxt-link to="/">Go Home</nuxt-link></h1>
   </div>
 </template>
 
@@ -18,7 +18,6 @@
       }
     },
     mounted () {
-      console.log(this.$router)
       this.$store.commit('startTitle', {
         text: '',
         label: 'LABEL',
