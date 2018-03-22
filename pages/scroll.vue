@@ -1,32 +1,6 @@
-<template>
-  <div>
-    <h1>Page Start</h1>
-    <h1>Page Start</h1>
-    <h1>Page Start</h1>
-    <h1>Page Start</h1>
-    <h1>Page Start</h1>
-    <h1>Page Start</h1>
-    <h1>Page Start</h1>
-    <h1>Page Start</h1>
-    <h1>Page Start</h1>
-    <h1>Page Start</h1>
-    <h1>Page Start</h1>
-    <h1>Page Start</h1>
-    <h1>Page Start</h1>
-    <h1>Page Start</h1>
-    <h1>Page Start</h1>
-    <h1>Page Start</h1>
-    <h1>Page Start</h1>
-    <h1>Page Start</h1>
-    <h1>Page Start</h1>
-    <h1>Page Start</h1>
-    <h1>Page Start</h1>
-    <h1>Page Start</h1>
-    <h1>Page Start</h1>
-    <h1>Page Start</h1>
-    <h1>Page Start</h1>
-    <h1>Page Start</h1>
-  </div>
+<template lang="pug">
+  div
+    h1(v-for="(val, i) in 30") Line {{i+1}}
 </template>
 
 <script>

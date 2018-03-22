@@ -1,7 +1,6 @@
-<template>
-  <div>
-    <h1>Mini Menu Only Desktop</h1>
-  </div>
+<template lang="pug">
+  div
+    h1 Mini Menu Only Desktop
 </template>
 
 <script>

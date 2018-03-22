@@ -17,6 +17,7 @@
     "@nuxtjs/pwa": "^2.0.8",
     "muse-ui": "^2.1.0",
     "nuxt": "^1.0.0",
+    "pug": "^2.0.3",
     "vue-media": "^1.1.1"
   },
   "devDependencies": {

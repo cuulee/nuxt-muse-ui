@@ -1,7 +1,7 @@
-<template>
-  <div>
-    <h1><nuxt-link to="/">Go Home</nuxt-link></h1>
-  </div>
+<template lang="pug">
+  div
+    h1
+      nuxt-link(to="/") Go Home
 </template>
 
 <script>

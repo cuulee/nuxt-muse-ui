@@ -1,7 +1,6 @@
-<template>
-  <div>
-    <h1>Test Nuxt</h1>
-  </div>
+<template lang="pug">
+  div
+    h1 Test Nuxt
 </template>
 
 <script>
