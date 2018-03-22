@@ -2,23 +2,21 @@
 .mu-appbar
   position: fixed
   top: 0
-  transition: transform .2s ease-in-out, left .2s ease-in-out
+  right: 0
+  width: auto
+  transition: transform .05s linear, left .2s ease-in-out
 
 .mu-appbar.hide
   transform: Translate3D(0, -100%, 0)
 
 .mu-drawer
-  transition: width .2s ease-in-out, transform .45s ease-in-out, visibility .45s ease-in-out
+  transition: width .2s ease-in-out, transform .2s ease-in-out, visibility .2s ease-in-out
 
 .mu-content-block
   display: flex
-  position: fixed
-  right: 0
-  bottom: 0
-  overflow-x: auto
   width: auto
   height: auto
-  transition: top .2s ease-in-out, left .2s ease-in-out
+  transition: margin-left .2s ease-in-out
 
 .title-editable
   padding-top: 16px
@@ -48,11 +46,10 @@
     <media :query="{ minWidth: 1024 }" @media-enter="$store.state.screen.desktop = true" @media-leave="$store.state.screen.desktop = false" />
     <mu-appbar
       :title="$store.state.titleData.editable? '' : $store.state.titleData.title"
-      :class="{ hide: scrollDown }"
       :zDepth="scrollDown ? 0 : 1"
-      :style="{ left: computeDrawerWidthSpace }">
+      :style="{ left: computeDrawerWidthSpace, transform: 'Translate3D(0, -'+scrollDown+'px, 0)' }">
       <mu-icon-button
-        v-if="!$store.state.screen.desktop && $store.state.drawer.exists"
+        v-if="!computeDrawerShow && $store.state.drawer.exists"
         icon="menu"
         slot="left"
         @click="$store.state.drawer.open = !$store.state.drawer.open"/>
@@ -91,8 +88,8 @@
       </template>
     </mu-appbar>
     <mu-drawer
-      :open="($store.state.drawer.open || $store.state.screen.desktop) && $store.state.drawer.exists"
-      :docked="$store.state.screen.desktop" @close="$store.state.drawer.open = false"
+      :open="($store.state.drawer.open || computeDrawerShow) && $store.state.drawer.exists"
+      :docked="computeDrawerShow" @close="$store.state.drawer.open = false"
       :zDepth="0"
       :width="computeDrawerWidth">
       <div
@@ -124,13 +121,8 @@
     </mu-drawer>
     <mu-content-block
       @scroll="eventScroll"
-      :style="{left: computeDrawerWidthSpace, top: computeHideAppbar}">
-      <div v-show="!waitLoad"><nuxt/></div>
-      <mu-circular-progress
-        v-if="waitLoad"
-        :size="104"
-        :strokeWidth="6"
-        style="position: absolute; top:50%; left: 50%; transform: translate3D(-50%, -50%, 0)"/>
+      :style="{'margin-left': computeDrawerWidthSpace, 'padding-top': appbarHeight+'px'}">
+      <nuxt/>
     </mu-content-block>
   </div>
 </template>
@@ -146,7 +138,7 @@
     },
     data () {
       return {
-        scrollDown: true,
+        scrollDown: 0,
         hoverTitleEdit: false,
         lastScrollTop: 0,
         drawerMini: true,
@@ -167,25 +159,26 @@
         return this.$store.state.drawer.exists ? width : 0
       },
       computeDrawerWidthSpace () {
-        return this.$store.state.screen.desktop ? this.computeDrawerWidth : 0
+        return this.computeDrawerShow ? this.computeDrawerWidth : 0
       },
-      computeHideAppbar () {
-        return this.scrollDown ? 0 : this.appbarHeight
+      computeDrawerShow () {
+        return this.$store.state.screen.desktop || (this.$store.state.screen.laptop && this.$store.state.drawer.mini)
       },
       computeTooltip () {
         return this.$store.state.titleData.edit ? this.$store.state.titleData.checkTooltip : this.$store.state.titleData.editTooltip
       },
       computeMiniDrawer () {
-        return this.$store.state.drawer.mini && this.drawerMini && this.$store.state.screen.desktop
+        return this.$store.state.drawer.mini && this.drawerMini && this.computeDrawerShow
       },
       appbarHeight () {
-        return this.$store.state.screen.phone ? '56px' : '64px'
+        return this.$store.state.screen.phone ? 56 : 64
       }
     },
     methods: {
       eventScroll (e) {
-        let top = this.$el.querySelector('.mu-content-block').scrollTop
-        this.scrollDown = top > this.lastScrollTop
+        let top = window.scrollTop || window.scrollY
+        this.scrollDown += (top - this.lastScrollTop)
+        this.scrollDown = this.scrollDown > this.appbarHeight ? this.appbarHeight : this.scrollDown < 0 ? 0 : this.scrollDown
         this.lastScrollTop = top
       },
       triggerTitleTooltip (val) {
@@ -208,18 +201,15 @@
       }
     },
     mounted () {
-      this.scrollDown = false
       this.waitLoad = false
       if (process.browser) {
-        let element = this.$el.querySelector('.mu-content-block')
-        this.lastScrollTop = element.scrollTop
-        if (element) element.addEventListener('scroll', this.eventScroll)
+        this.lastScrollTop = window.scrollTop || window.scrollY
+        window.addEventListener('scroll', this.eventScroll)
       }
     },
     destroyed () {
       if (process.browser) {
-        let element = this.$el.querySelector('.mu-content-block')
-        if (element) element.removeEventListener('scroll', this.eventScroll)
+        window.removeEventListener('scroll', this.eventScroll)
       }
     }
   }
