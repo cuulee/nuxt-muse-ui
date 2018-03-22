@@ -22,20 +22,20 @@
   transition: visibility .2s ease-in-out, opacity .2s ease-in-out
   opacity: .99
 
-.hidden
+.hide
   visibility: hidden
   opacity: .01
 
 </style>
 
-<template>
-  <div class="root">
-    <h1 v-if="$store.state.logo.type === 'text'" :style="{'height': mini ? '72px' : '104px'}">{{mini ? $store.state.logo.miniContent : $store.state.logo.content}}</h1>
-    <div v-if="$store.state.logo.type === 'image'" :style="{'height': mini ? '72px' : '104px'}">
-      <div class="hidable" :class="{hidden: !mini}" :style="{'background-image': 'url('+$store.state.logo.miniContent+')'}"></div>
-      <div class="hidable" :class="{hidden: mini}" :style="{'background-image': 'url('+$store.state.logo.content+')'}"></div>
-    </div>
-  </div>
+<template lang="pug">
+  div(class="root")
+    h1(
+      v-if="$store.state.logo.type === 'text'"
+      :style="{'height': mini ? '72px' : '104px'}") {{mini ? $store.state.logo.miniContent : $store.state.logo.content}}
+    div(v-if="$store.state.logo.type === 'image'" :style="{'height': mini ? '72px' : '104px'}")
+      div(class="hidable" :class="{hide: !mini}" :style="{'background-image': 'url('+$store.state.logo.miniContent+')'}")
+      div(class="hidable" :class="{hide: mini}" :style="{'background-image': 'url('+$store.state.logo.content+')'}")
 </template>
 
 <script>
