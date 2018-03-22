@@ -2,6 +2,12 @@ const nodeExternals = require('webpack-node-externals')
 const resolve = (dir) => require('path').join(__dirname, dir)
 
 module.exports = {
+  module: [
+    '@nuxtjs/component-cache',
+    '@nuxtjs/pwa',
+    '@nuxtjs/axios'
+  ],
+  mode: 'spa',
   /*
   ** Headers of the page
   */

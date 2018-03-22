@@ -8,9 +8,13 @@
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
-    "generate": "nuxt generate"
+    "generate": "nuxt generate",
+    "heroku-postbuild": "yarn build"
   },
   "dependencies": {
+    "@nuxtjs/axios": "^5.1.1",
+    "@nuxtjs/component-cache": "^1.1.1",
+    "@nuxtjs/pwa": "^2.0.8",
     "muse-ui": "^2.1.0",
     "nuxt": "^1.0.0",
     "vue-media": "^1.1.1"

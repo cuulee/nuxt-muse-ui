@@ -23,7 +23,7 @@ const state = {
   logo: {
     type: 'image',
     miniContent: '/favicon.ico',
-    content: '/v.png'
+    content: '/icon.png'
   }
 }
 
