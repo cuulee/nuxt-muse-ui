@@ -26,6 +26,10 @@
           this.$router.push({ query: { id: val } })
         }
       }
+    },
+    validate ({ query }) {
+      // setTimeout(() => redirect('/'), 2000)
+      return true
     }
   }
 </script>

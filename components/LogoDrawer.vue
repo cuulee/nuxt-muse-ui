@@ -1,31 +1,35 @@
-<style lang="sass" scoped>
-.root
-  display: flex
-  justify-content: center
-  align-items: stretch
-  text-align: center
-  > *
-    width: calc(100% - 16px)
-    transition: height .2s ease-in-out
-    position: relative
-  div > div
-    position: absolute
-    top: 0
-    right: 0
-    bottom: 0
-    left: 0
-    background-repeat: no-repeat
-    background-position: center
-    background-size: contain
+<style lang="less" scoped>
+.root {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  text-align: center;
+  > * {
+    width: calc(100% - 16px);
+    transition: height .2s ease-in-out;
+    position: relative;
+  }
+  div > div {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+  }
+}
 
-.hidable
-  transition: visibility .2s ease-in-out, opacity .2s ease-in-out
-  opacity: .99
+.hidable {
+  transition: visibility .2s ease-in-out, opacity .2s ease-in-out;
+  opacity: .99;
+}
 
-.hide
-  visibility: hidden
-  opacity: .01
-
+.hide {
+  visibility: hidden;
+  opacity: .01;
+}
 </style>
 
 <template lang="pug">

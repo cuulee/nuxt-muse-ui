@@ -1,0 +1,28 @@
+[
+  {
+    "icon": "home",
+    "path": "/home",
+    "label": "Home"
+  },
+  {
+    "icon": "assessment",
+    "path": "/no-menu",
+    "label": "No Menu"
+  },
+  {
+    "icon": "assignment",
+    "path": "/mini-menu",
+    "label": "Mini Menu"
+  },
+  {
+    "icon": "person",
+    "path": "/scroll",
+    "label": "Scroll"
+  },
+  {
+    "icon": "",
+    "path": "/page",
+    "label": "MultiPath",
+    "divider": true
+  }
+]

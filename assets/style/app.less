@@ -1,0 +1,17 @@
+@import "~muse-ui/less/vars.less"; // default basic variable
+@import "~muse-ui/less/theme-vars.less"; // default component variable
+@import "~muse-ui/less/theme.less"; // style related to theme
+
+@primaryColor: @lightBlue700;
+
+.page-enter-active, .page-leave-active {
+  transition: opacity .2s;
+}
+
+.page-enter, .page-leave-to {
+  opacity: 0;
+}
+
+.selected .mu-icon {
+  color: @primaryColor;
+}

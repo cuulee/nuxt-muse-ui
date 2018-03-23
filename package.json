@@ -15,10 +15,12 @@
     "@nuxtjs/axios": "^5.1.1",
     "@nuxtjs/component-cache": "^1.1.1",
     "@nuxtjs/pwa": "^2.0.8",
+    "dexie": "^2.0.2",
     "muse-ui": "^2.1.0",
     "nuxt": "^1.0.0",
     "pug": "^2.0.3",
-    "vue-media": "^1.1.1"
+    "vue-media": "^1.1.1",
+    "vue-recaptcha": "^1.1.0"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
@@ -31,7 +33,7 @@
     "eslint-plugin-node": "^5.1.1",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
-    "node-sass": "^4.7.2",
-    "sass-loader": "^6.0.7"
+    "less": "^3.0.1",
+    "less-loader": "^4.1.0"
   }
 }

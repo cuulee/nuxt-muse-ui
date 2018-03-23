@@ -1,0 +1,7 @@
+{
+  "name": "data-base-template",
+  "version": 1,
+  "stores": {
+    "users": "_id,email"
+  }
+}

@@ -2,7 +2,7 @@ const nodeExternals = require('webpack-node-externals')
 const resolve = (dir) => require('path').join(__dirname, dir)
 
 module.exports = {
-  module: [
+  modules: [
     '@nuxtjs/component-cache',
     '@nuxtjs/pwa',
     '@nuxtjs/axios'
@@ -22,11 +22,20 @@ module.exports = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Material+Icons' }
+    ],
+    script: [
+      { src: 'https://www.google.com/recaptcha/api.js', async: true, defer: true }
     ]
   },
-  plugins: ['~/plugins/plugin-ui.js'],
+  plugins: [
+    { src: '~/plugins/plugin-ui.js', ssr: false}, 
+    { src: '~/plugins/plugin-db.js', ssr: false}
+  ],
+  axios: {
+    // proxyHeaders: false
+  },
   css: [
-    '~/assets/style/app.sass'
+    '~/assets/style/app.less'
   ],
   /*
   ** Customize the progress bar color
@@ -36,9 +45,6 @@ module.exports = {
   ** Build configuration
   */
   build: {
-    vendor: [
-      '~/plugins/plugin-ui.js'
-    ],
     extractCSS: true,
     /*
     ** Run ESLint on save

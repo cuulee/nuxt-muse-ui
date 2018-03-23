@@ -1,41 +1,51 @@
-<style lang="sass">
-.mu-appbar
-  position: fixed
-  top: 0
-  right: 0
-  width: auto
-  transition: transform .05s linear, left .2s ease-in-out
+<style lang="less">
+.mu-appbar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: auto;
+  transition: transform .05s linear, left .2s ease-in-out;
+}
 
-.mu-appbar.hide
-  transform: Translate3D(0, -100%, 0)
+.mu-appbar.hide {
+  transform: Translate3D(0, -100%, 0);
+}
 
-.mu-drawer
-  transition: width .2s ease-in-out, transform .2s ease-in-out, visibility .2s ease-in-out
+.mu-drawer {
+  transition: width .2s ease-in-out, transform .2s ease-in-out, visibility .2s ease-in-out;
+}
 
-.mu-content-block
-  display: flex
-  width: auto
-  height: auto
-  transition: margin-left .2s ease-in-out
+.mu-content-block {
+  display: flex;
+  width: auto;
+  height: auto;
+  min-height: 100vh;
+  transition: margin-left .2s ease-in-out;
+}
 
-.title-editable
-  padding-top: 16px
-  padding-left: 8px
+.title-editable {
+  padding-top: 16px;
+  padding-left: 8px;
+}
 
-.title-color
-  color: #FFF
-  font-size: 24px
+.title-color {
+  color: #FFF;
+  font-size: 24px;
+}
 
-.title-line-color
-  color: #FFF
-  background-color: #FFF
-  border-color: #FFF
+.title-line-color {
+  color: #FFF;
+  background-color: #FFF;
+  border-color: #FFF;
+}
 
-.color-active
-  color: blue
+.color-active {
+  color: blue;
+}
 
-.mu-item, .mu-list-item
-  height: 48px
+.mu-item, .mu-list-item {
+  height: 48px;
+}
 </style>
 
 <template lang="pug">
@@ -104,7 +114,7 @@
         @mouseenter="triggerOpenMini()"
         @mouseleave="triggerCloseMini()")
         mu-list(:value="extractLinkValue($route.path)")
-          logo-drawer(:mini="computeMiniDrawer")
+          my-logo-drawer(:mini="computeMiniDrawer")
           template(v-for="(item, index) in routes")
             mu-divider(v-if="item.divider")
             mu-list-item(
@@ -125,18 +135,15 @@
     mu-content-block(
       @scroll="eventScroll"
       :style="{'margin-left': computeDrawerWidthSpace, 'padding-top': appbarHeight+'px'}")
-      nuxt
+      nuxt(v-if="loaded")
 </template>
-
 <script>
   import Media from 'vue-media'
-  import LogoDrawer from '~/components/LogoDrawer'
+  import MyLogoDrawer from '~/components/LogoDrawer'
+  import routes from '~/static/routes'
 
   export default {
-    components: {
-      media: Media,
-      'logo-drawer': LogoDrawer
-    },
+    components: { Media, MyLogoDrawer },
     data () {
       return {
         scrollDown: 0,
@@ -144,13 +151,8 @@
         lastScrollTop: 0,
         drawerMini: true,
         waitSize: 104,
-        routes: [
-          {icon: 'home', path: '/', label: 'Home'},
-          {icon: 'assessment', path: '/no-menu', label: 'No Menu'},
-          {icon: 'assignment', path: '/mini-menu', label: 'Mini Menu'},
-          {icon: 'person', path: '/scroll', label: 'Scroll'},
-          {icon: '', path: '/page', label: 'MultiPath', divider: true}
-        ]
+        loaded: false,
+        routes
       }
     },
     computed: {
@@ -200,11 +202,18 @@
         }
       }
     },
+    beforeCreate () {
+      this.$router.push({
+        path: '/',
+        query: Object.assign({ target: this.$route.path.slice(1) || undefined }, this.$route.query)
+      })
+    },
     mounted () {
       if (process.browser) {
         this.lastScrollTop = window.scrollTop || window.scrollY
         window.addEventListener('scroll', this.eventScroll)
       }
+      setTimeout(() => { this.loaded = true }, 200)
     },
     destroyed () {
       if (process.browser) {
