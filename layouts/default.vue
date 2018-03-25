@@ -42,10 +42,6 @@
 .color-active {
   color: blue;
 }
-
-.mu-item, .mu-list-item {
-  height: 48px;
-}
 </style>
 
 <template lang="pug">
@@ -134,7 +130,7 @@
                 horizontalPosition="right")
     mu-content-block(
       @scroll="eventScroll"
-      :style="{'margin-left': computeDrawerWidthSpace, 'padding-top': appbarHeight+'px'}")
+      :style="{'margin-left': computeDrawerWidthSpace, 'padding-top': (appbarHeight+16) + 'px'}")
       nuxt(v-if="loaded")
 </template>
 <script>
