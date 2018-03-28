@@ -1,32 +1,18 @@
 <template lang="pug">
-  div(class="page")
-    my-expansion-panels(:accordion="accordion")
-      my-expansion-panel(
-        v-for="v in 8"
+  div.page
+    c-expansion-panels(:accordion="accordion")
+      c-expansion-panel(
+        v-for="(v, i) in 20"
+        :key="i"
         :description="'sub headasdasdasdasdasd'"
-        :secondaryDescription="v % 3 ? 'sub head' : ''"
-        :subTitle="v % 2 ? 'sub head' : ''"
-        :title="'Line ' + v")
+        :secondaryDescription="i % 3 ? 'sub head' : ''"
+        :subTitle="i % 2 ? 'sub head' : ''"
+        :title="'Line ' + (i+1)")
         h1 asdasd
 </template>
 
 <script>
-  import MyExpansionPanel from '~/components/ExpansionPanel'
-  import MyExpansionPanels from '~/components/ExpansionPanels'
-  import MyStep from '~/components/Step'
-  import MyStepper from '~/components/Stepper'
-  import MyStepContent from '~/components/StepContent'
-  import MyStepLabel from '~/components/StepLabel'
-
   export default {
-    components: {
-      MyExpansionPanel,
-      MyExpansionPanels,
-      MyStep,
-      MyStepper,
-      MyStepContent,
-      MyStepLabel
-    },
     data () {
       return {
         title: 'Page 02',

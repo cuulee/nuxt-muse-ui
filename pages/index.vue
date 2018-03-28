@@ -3,12 +3,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
 }
 </style>
 
 <template lang="pug">
-  div.root
+  div.page.root
     mu-circular-progress(:strokeWidth="6" :size="72")
 </template>
 

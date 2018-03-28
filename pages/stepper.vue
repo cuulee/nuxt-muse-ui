@@ -1,19 +1,18 @@
 <template lang="pug">
   div.page
-    h1 Mini Menu Only Desktop
+    
 </template>
 
 <script>
   export default {
     data () {
       return {
-        title: 'Mini Menu'
+        title: 'Stepper'
       }
     },
     mounted () {
       this.$store.commit('startTitle', {
-        title: this.title,
-        miniDrawer: true
+        title: this.title
       })
     }
   }

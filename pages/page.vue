@@ -1,5 +1,5 @@
 <template lang="pug">
-  div
+  div.page
     h1 Parameter:
     h3 {{userId}}
     mu-text-field(labelFloat label="Enter your ID" v-model="userId")

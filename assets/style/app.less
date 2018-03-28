@@ -5,21 +5,22 @@
 @primaryColor: @lightBlue700;
 
 .page-enter-active, .page-leave-active {
-  transition: opacity .2s;
+  transition: opacity .2s ease-in-out;
 }
 
 .page-enter, .page-leave-to {
-  opacity: 0;
+  opacity: 0.01;
 }
 
 .page {
   width: 100%;
 }
 
-.selected .mu-icon {
-  color: @primaryColor;
-}
-
 .mu-item, .mu-list-item {
   height: 48px;
+}
+
+.selected .mu-icon,
+.primary-color {
+  color: @primaryColor;
 }

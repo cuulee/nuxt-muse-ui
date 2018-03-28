@@ -3,13 +3,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
 }
 </style>
 
 <template lang="pug">
-  div.root
-    my-login(@action="actionLogin")
+  div.page.root
+    c-login(@action="actionLogin")
       mu-text-field(
         slot-scope="prop"
         v-if="prop.state === 'register'"
@@ -20,10 +19,7 @@
 </template>
 
 <script>
-  import MyLogin from '~/components/Login'
-
   export default {
-    components: { MyLogin },
     data () {
       return {
         title: 'Login'

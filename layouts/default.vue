@@ -110,7 +110,7 @@
         @mouseenter="triggerOpenMini()"
         @mouseleave="triggerCloseMini()")
         mu-list(:value="extractLinkValue($route.path)")
-          my-logo-drawer(:mini="computeMiniDrawer")
+          c-logo-drawer(:mini="computeMiniDrawer")
           template(v-for="(item, index) in routes")
             mu-divider(v-if="item.divider")
             mu-list-item(
@@ -134,12 +134,9 @@
       nuxt(v-if="loaded")
 </template>
 <script>
-  import Media from 'vue-media'
-  import MyLogoDrawer from '~/components/LogoDrawer'
   import routes from '~/static/routes'
 
   export default {
-    components: { Media, MyLogoDrawer },
     data () {
       return {
         scrollDown: 0,

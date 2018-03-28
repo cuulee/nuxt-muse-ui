@@ -51,13 +51,14 @@
         slot(:extra="sloted" :state="state")
         vue-recaptcha(sitekey="6LejJEIUAAAAAOoYdeiUgJLD1McwQpXOPtboygYu")
       mu-card-actions
-        mu-raised-button(primary v-if="isLogin" :label="getLabel('loginEnter', 'Sign in')" type="submit")
-        mu-raised-button(primary v-if="isRegister" :label="getLabel('registerEnter', 'Sign up')" type="submit")
-        mu-raised-button(primary v-if="isForget" :label="getLabel('forgetEnter', 'Recover')" type="submit")
-        mu-flat-button(v-if="isLogin" :label="getLabel('loginRegister', 'Create an account')" @click.prevent="state = 'register'")
-        mu-flat-button(v-if="isLogin" :label="getLabel('loginForget', 'I forget my password')" @click.prevent="state = 'forget'")
-        mu-flat-button(v-if="isRegister" :label="getLabel('registerReady', 'I already have an account')" @click.prevent="state = 'login'")
-        mu-flat-button(v-if="isForget" :label="getLabel('forgetReady', 'I remembered my password')" @click.prevent="state = 'login'")
+        button(type="submit" ref="submitButton" style="display: none")
+        mu-raised-button(primary v-if="isLogin" :label="getLabel('loginEnter', 'Sign in')" @click="$refs.submitButton.click()")
+        mu-raised-button(primary v-if="isRegister" :label="getLabel('registerEnter', 'Sign up')" @click="$refs.submitButton.click()")
+        mu-raised-button(primary v-if="isForget" :label="getLabel('forgetEnter', 'Recover')" @click="$refs.submitButton.click()")
+        mu-flat-button(v-if="isLogin" :label="getLabel('loginRegister', 'Create an account')" @click.prevent="setState('register')")
+        mu-flat-button(v-if="isLogin" :label="getLabel('loginForget', 'I forget my password')" @click.prevent="setState('forget')")
+        mu-flat-button(v-if="isRegister" :label="getLabel('registerReady', 'I already have an account')" @click.prevent="setState('login')")
+        mu-flat-button(v-if="isForget" :label="getLabel('forgetReady', 'I remembered my password')" @click.prevent="setState('login')")
 </template>
 
 <script>
@@ -120,6 +121,10 @@
         this.$emit('action', data)
         e.preventDefault()
         return false
+      },
+      setState (s) {
+        this.state = s
+        this.$refs.emailInput.focus()
       }
     },
     mounted () {

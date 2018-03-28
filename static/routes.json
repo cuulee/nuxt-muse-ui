@@ -20,9 +20,15 @@
     "label": "Scroll"
   },
   {
-    "icon": "",
+    "icon": "close",
     "path": "/page",
     "label": "MultiPath",
     "divider": true
+  },
+  {
+    "icon": "add",
+    "path": "/stepper",
+    "label": "Stepper",
+    "divider": false
   }
 ]

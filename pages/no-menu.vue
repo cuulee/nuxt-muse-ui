@@ -1,5 +1,5 @@
 <template lang="pug">
-  div
+  div.page
     h1
       nuxt-link(to="/") Go Home
 </template>
