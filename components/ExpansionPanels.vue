@@ -1,5 +1,5 @@
 <style lang="less" scoped>
-.root {
+.panels {
   display: flex;
   flex-flow: column;
   width: 100%;
@@ -7,7 +7,7 @@
 </style>
 
 <template lang="pug">
-  div(class="root")
+  div.panels
     slot
 </template>
 

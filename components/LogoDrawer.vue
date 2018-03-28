@@ -1,5 +1,5 @@
 <style lang="less" scoped>
-.root {
+.logo-drawer {
   display: flex;
   justify-content: center;
   align-items: stretch;
@@ -33,7 +33,7 @@
 </style>
 
 <template lang="pug">
-  div(class="root")
+  div.logo-drawer
     h1(
       v-if="$store.state.logo.type === 'text'"
       :style="{'height': mini ? '72px' : '104px'}") {{mini ? $store.state.logo.miniContent : $store.state.logo.content}}

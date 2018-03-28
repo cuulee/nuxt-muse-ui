@@ -1,11 +1,11 @@
 <style lang="less" scoped>
-.root {
+.template {
 
 }
 </style>
 
 <template lang="pug">
-  div(class="root")
+  div.template
 </template>
 
 <script>

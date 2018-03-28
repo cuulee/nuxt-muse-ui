@@ -1,5 +1,5 @@
 <style lang="less" scoped>
-.root {
+.login {
   width: 360px;
   @media screen and (max-width: 392px) {
     min-width: 256px;
@@ -18,7 +18,7 @@
 
 <template lang="pug">
   form(@submit="submitForm" action="#" method="get" ref="formLogin")
-    mu-card(class="root")
+    mu-card.login
       mu-card-title(:title="computeTitle")
       mu-card-text
         mu-text-field(
