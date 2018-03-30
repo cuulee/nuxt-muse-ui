@@ -1,12 +1,51 @@
 <style lang="less" scoped>
+@import "~assets/style/vars.less";
 .step {
-
+  display: flex;
+  flex-flow: column nowrap;
+  flex-grow: 1;
+  & .content-step {
+    display: flex;
+    overflow: hidden;
+    transition: height .2s ease-in-out;
+    & .line {
+      display: inline-block;
+      width: 0;
+      border-right: 1px solid @grey400;
+      padding-left: 36px;
+      &.transparent {
+        border-right-color: transparent;
+      }
+    }
+    & .content {
+      padding: 8px 24px;
+      flex-grow: 1;
+    }
+  }
 }
 </style>
 
 <template lang="pug">
   div.step
-    slot
+    c-label(
+      v-if="vertical"
+      :vertical="true"
+      @action="action"
+      :index="index+1"
+      :first="index === 0"
+      :last="!hasNext"
+      :active="stateActive"
+      :inactive="stateInactive"
+      :editable="stateEditable"
+      :completed="stateCompleted"
+      :error="stateError"
+      :optionalLabel="optionalLabel"
+      :title="title"
+      :subTitle="subTitle")
+    div.content-step(:style="{height: computeHeight}")
+      div.line(v-if="vertical" :class="{transparent: !hasNext}")
+      div.content(ref="content")
+        slot
 </template>
 
 <script>
@@ -16,20 +55,49 @@
     components: {
       'c-label': Label
     },
+    props: {
+      title: {
+        type: String
+      },
+      subTitle: {
+        type: String
+      },
+      optionalLabel: {
+        type: Boolean,
+        default: false
+      },
+      optional: {
+        type: Boolean,
+        default: false
+      },
+      editable: {
+        type: Boolean,
+        default: false
+      }
+    },
+    watch: {
+      stateActive (v) {
+        if (v) this.stateInactive = false
+      }
+    },
     data () {
       return {
-        state: []
+        stateActive: false,
+        stateInactive: true,
+        stateEditable: false,
+        stateCompleted: false,
+        stateError: false
       }
     },
     computed: {
       vertical () {
-        return this.$parent.$parent.vertical
+        return this.parent.vertical
       },
       currentIndex () {
-        return this.$parent.$parent.index
+        return this.parent.index
       },
       index () {
-        let steps = this.$parent.$parent.$slots.default
+        let steps = this.parent.$slots.default
         let index = -1
         for (let i = 0; i < steps.length; i++) {
           if (steps[i].componentInstance === this) {
@@ -38,19 +106,61 @@
           }
         }
         return index
+      },
+      getPrev () {
+        return this.parent.steps[this.index - 1]
+      },
+      hasPrev () {
+        return !!this.getPrev
+      },
+      getNext () {
+        return this.parent.steps[this.index + 1]
+      },
+      hasNext () {
+        return !!this.getNext
+      },
+      parent () {
+        return this.$parent.$parent
+      },
+      computeHeight () {
+        if (this.vertical) {
+          let i = 0
+          if (this.stateActive) {
+            i = this.$refs.content.scrollHeight || this.$refs.content.clientHeight || this.$refs.content.offsetHeight
+          }
+          return `${i}px`
+        } else {
+          return '100%'
+        }
+      },
+      isFinish () {
+        return this.optional || this.stateCompleted
+      },
+      canOpen () {
+        return !this.stateCompleted || (this.stateCompleted && (this.stateEditable || this.stateError))
       }
     },
     methods: {
-      addState (s) {
-        if (this.state.indexOf(s) < 0) this.state.push(s)
+      action () {
+        let prev = this.getPrev
+        if (this.index === 0 || (prev && prev.isFinish && this.canOpen)) {
+          this.parent.setActive(this.index)
+        }
       },
-      removeState (s) {
-        let i = this.state.indexOf(s)
-        if (i >= 0) this.state.splite(i, 1)
+      finish (error = false) {
+        this.stateCompleted = true
+        this.stateEditable = this.editable
+        this.stateError = error
+
+        this.parent.setActive(this.index + 1)
+        this.$emit('finish')
       },
-      hasState (s) {
-        return this.state.indexOf(s) >= 0
+      finishError () {
+        this.finish(true)
       }
+    },
+    mounted () {
+      this.parent.setStep(this.index, this)
     }
   }
 </script>

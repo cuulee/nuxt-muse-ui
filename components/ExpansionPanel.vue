@@ -190,7 +190,7 @@
     },
     methods: {
       calcHeight (el) {
-        return el.clientHeight || el.offsetHeight || el.scrollHeight
+        return el.scrollHeight || el.clientHeight || el.offsetHeight
       },
       triggerOpen () {
         this.open = !this.open

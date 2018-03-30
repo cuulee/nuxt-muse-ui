@@ -20,16 +20,6 @@
     background-size: contain;
   }
 }
-
-.hidable {
-  transition: visibility .2s ease-in-out, opacity .2s ease-in-out;
-  opacity: .99;
-}
-
-.hide {
-  visibility: hidden;
-  opacity: .01;
-}
 </style>
 
 <template lang="pug">

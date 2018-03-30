@@ -1,8 +1,4 @@
-@import "~muse-ui/less/vars.less"; // default basic variable
-@import "~muse-ui/less/theme-vars.less"; // default component variable
-@import "~muse-ui/less/theme.less"; // style related to theme
-
-@primaryColor: @lightBlue700;
+@import "./vars.less";
 
 .page-enter-active, .page-leave-active {
   transition: opacity .2s ease-in-out;
@@ -20,19 +16,16 @@
   height: 48px;
 }
 
-.selected .mu-icon,
-.primary-color {
+.selected .mu-icon {
   color: @primaryColor;
 }
 
-.primary-color-bg {
-  background-color: @primaryColor;
+.hidable {
+  transition: visibility .2s ease-in-out, opacity .2s ease-in-out;
+  opacity: .99;
 }
 
-.accent-color {
-  color: @accentColor;
-}
-
-.accent-color-bg {
-  background-color: @accentColor;
+.hide {
+  visibility: hidden;
+  opacity: .01;
 }

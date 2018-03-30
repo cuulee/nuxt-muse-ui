@@ -1,10 +1,23 @@
 <template lang="pug">
   div.page
-    c-stepper()
+    c-stepper(:vertical="vertical" auto-start)
       c-step(
-        v-for="(v, i) in 5"
-        :key="i")
-        h1 Content {{i+1}}
+        title="Um Titulo"
+        subTitle="sub")
+        h1(style="background-color: blue;") Content
+      c-step(
+        title="Um Titulo"
+        subTitle="sub"
+        optional)
+        h1(style="background-color: blue;") Content
+      c-step(
+        title="Um Titulo"
+        subTitle="sub")
+        h1(style="background-color: blue;") Content
+      c-step(
+        title="Um Titulo"
+        subTitle="sub")
+        h1(style="background-color: blue;") Content
 </template>
 
 <script>
@@ -12,7 +25,8 @@
     data () {
       return {
         title: 'Stepper',
-        q: 3
+        q: 3,
+        vertical: true
       }
     },
     mounted () {
