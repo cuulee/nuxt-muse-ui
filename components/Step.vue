@@ -18,7 +18,7 @@
       }
     }
     & .content {
-      padding: 8px 24px;
+      margin: 8px 24px;
       flex-grow: 1;
     }
   }
@@ -32,13 +32,14 @@
       :vertical="true"
       @action="action"
       :index="index+1"
+      :icon="icon"
       :first="index === 0"
       :last="!hasNext"
       :active="stateActive"
+      :colored="stateColored"
       :inactive="stateInactive"
-      :editable="stateEditable"
       :completed="stateCompleted"
-      :error="stateError"
+      :error="error"
       :optionalLabel="optionalLabel"
       :title="title"
       :subTitle="subTitle")
@@ -66,11 +67,11 @@
         type: Boolean,
         default: false
       },
-      optional: {
-        type: Boolean,
-        default: false
+      icon: {
+        type: String,
+        default: null
       },
-      editable: {
+      error: {
         type: Boolean,
         default: false
       }
@@ -78,15 +79,22 @@
     watch: {
       stateActive (v) {
         if (v) this.stateInactive = false
+      },
+      currentIndex (i) {
+        this.stateActive = i === this.index
+        this.stateColored = i >= this.index
+      },
+      error (b) {
+        this.stateError = b
       }
     },
     data () {
       return {
         stateActive: false,
+        stateColored: false,
         stateInactive: true,
         stateEditable: false,
-        stateCompleted: false,
-        stateError: false
+        stateCompleted: false
       }
     },
     computed: {
@@ -94,7 +102,7 @@
         return this.parent.vertical
       },
       currentIndex () {
-        return this.parent.index
+        return this.parent.activeIndex
       },
       index () {
         let steps = this.parent.$slots.default
@@ -132,31 +140,11 @@
         } else {
           return '100%'
         }
-      },
-      isFinish () {
-        return this.optional || this.stateCompleted
-      },
-      canOpen () {
-        return !this.stateCompleted || (this.stateCompleted && (this.stateEditable || this.stateError))
       }
     },
     methods: {
-      action () {
-        let prev = this.getPrev
-        if (this.index === 0 || (prev && prev.isFinish && this.canOpen)) {
-          this.parent.setActive(this.index)
-        }
-      },
-      finish (error = false) {
-        this.stateCompleted = true
-        this.stateEditable = this.editable
-        this.stateError = error
-
-        this.parent.setActive(this.index + 1)
-        this.$emit('finish')
-      },
-      finishError () {
-        this.finish(true)
+      action (e) {
+        this.$emit('action', e)
       }
     },
     mounted () {

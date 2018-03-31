@@ -28,11 +28,13 @@
         :key="i"
         @action="step.action"
         :index="step.index+1"
+        :icon="step.icon"
         :active="step.stateActive"
+        :colored="step.stateColored"
         :inactive="step.stateInactive"
         :editable="step.stateEditable"
         :completed="step.stateCompleted"
-        :error="step.stateError"
+        :error="step.error"
         :optionalLabel="step.optionalLabel"
         :title="step.title"
         :subTitle="step.subTitle")
@@ -53,23 +55,28 @@
         type: Boolean,
         default: false
       },
-      'auto-start': {
-        type: Boolean,
-        default: false
+      activeIndex: {
+        type: Number,
+        default: -1
       }
     },
     data () {
       return {
-        index: -1,
         active: false,
+        height: 0,
         steps: []
+      }
+    },
+    watch: {
+      activeIndex (i) {
+        this.active = i >= 0 && i < this.steps.length
       }
     },
     computed: {
       computeHeight () {
         if (!this.vertical) {
           let i = 1
-          i = this.active && this.$refs.steps ? this.$refs.steps.scrollHeight || this.$refs.steps.clientHeight || this.$refs.steps.offsetHeight : 0
+          i = this.active ? this.height : 0
           return `${i}px`
         } else {
           return '100%'
@@ -83,7 +90,7 @@
       computeTransform () {
         let i = 0
         if (!this.vertical) {
-          let m = this.index >= this.steps.length ? this.steps.length - 1 : this.index
+          let m = this.activeIndex >= this.steps.length ? this.steps.length - 1 : this.activeIndex
           i = m * 100 / this.steps.length
         }
         return `Translate3D(-${i}%, 0, 0)`
@@ -92,21 +99,12 @@
     methods: {
       setStep (i, s) {
         this.$set(this.steps, i, s)
-      },
-      setActive (index) {
-        this.index = index
-        for (let i = 0; i < this.steps.length; i++) {
-          if (i === index) {
-            this.steps[i].stateActive = true
-            continue
-          }
-          this.steps[i].stateActive = false
-        }
-        this.active = index >= 0 && index < this.steps.length
       }
     },
     mounted () {
-      if (this.autoStart) setTimeout(() => this.setActive(0), 200)
+      this.$nextTick(() => {
+        this.height = this.$refs.steps.scrollHeight || this.$refs.steps.clientHeight || this.$refs.steps.offsetHeight
+      })
     }
   }
 </script>

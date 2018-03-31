@@ -85,7 +85,7 @@
   & > span:last-child {
     line-height: 12px;
     font-size: 12px;
-    color: rgba(0, 0, 0, .54);
+    color: rgba(0, 0, 0, 0.54);
   }
 }
 
@@ -108,12 +108,15 @@
   }
 }
 
-.active {
+.colored {
   & .icon-content {
     background-color: @primaryColor;
   }
+}
+
+.active {
   & .title > span:first-child {
-    color: rgba(0, 0, 0, .87);
+    color: rgba(0, 0, 0, 0.87);
     font-weight: 500;
   }
 }
@@ -123,15 +126,28 @@
     color: @lighterPrimaryColor;
   }
 }
+
+.error {
+  & * {
+    color: @red !important;
+  }
+  & .icon-content {
+    background-color: transparent;
+    & i {
+      font-size: 24px;
+    }
+  }
+}
 </style>
 
 <template lang="pug">
-  div.step-label(:class="{vertical, active, inactive, editable, completed, error, first, last}" tab-index="0")
+  div.step-label(:class="{vertical, active, colored, inactive, completed, error, first, last}" tab-index="0")
     div
       div.line
       div.labels
         div.icon-content
-          i(v-if="completed" class="material-icons") {{editable ? 'edit' : 'check'}}
+          i(v-if="error" class="material-icons") warning
+          i(v-else-if="icon" class="material-icons") {{icon}}
           span(v-else) {{index}}
         div.title(v-if="!!title")
           span {{title}}
@@ -155,6 +171,9 @@
       subTitle: {
         type: String
       },
+      icon: {
+        type: String
+      },
       vertical: {
         type: Boolean,
         default: false
@@ -163,11 +182,11 @@
         type: Boolean,
         default: false
       },
-      inactive: {
+      colored: {
         type: Boolean,
         default: false
       },
-      editable: {
+      inactive: {
         type: Boolean,
         default: false
       },
